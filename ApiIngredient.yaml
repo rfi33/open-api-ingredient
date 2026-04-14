@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: Dish and Ingredient API
+  description: OpenAPI specification for managing ingredients and dishes
+  version: 1.0.0
+
+servers:
+  - url: 'http://localhost:8080'
+
+paths:
+  '/ingredient':
+    get:
+      responses:
+        '200':
+          description: List of ingredients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: #/components/schemas/Ingredient
+  '/ingredient/{id}':
+    get:
+      summary: Retrieve an ingredient by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ingredient found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ingedient'
+        '404':
+          description: Ingredient not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Ingredient.id={id} is not found"
+

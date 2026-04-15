@@ -18,10 +18,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/Ingredient
+                  $ref: '#/components/schemas/Ingredient'
   '/ingredient/{id}':
     get:
-      summary: Retrieve an ingredient by its ID
       parameters:
         - name: id
           in: path
@@ -34,14 +33,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ingedient'
+                $ref: '#/components/schemas/Ingredient'
         '404':
           description: Ingredient not found
           content:
             text/plain:
               schema:
                 type: string
-                example: "Ingredient.id={id} is not found"
+                exemple: "Ingredient.id={id} is not found"
 
   '/ingredient/{id}/stock':
     get:
@@ -78,7 +77,7 @@ paths:
             text/plain:
               schema:
                 type : string
-                exemple : "Either mandatory query parameter `at` or `unit` is not provided."
+                exemple : "Either mandatory query parameter at or unit is not provided."
         '404':
           description: Ingredient not found
           content:
@@ -86,10 +85,55 @@ paths:
               schema:
                 type: string
                 exemple: "Ingredient.id={id} is not found"
+  '/dishes':
+    get:
+      responses:
+        '200':
+          description: List of dishes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
+
+  '/dishes/{id}/ingredients':
+    put:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Ingredient'
+      responses:
+        '200':
+          description: Ingredient updated
+        '400':
+          description: Missing request body
+          content:
+            text/plain:
+              schema:
+                type: string
+                exemple: "Request body is required"
+        '404':
+          description: Dish not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                exemple: "Dish.id={id} is not found"
+
 
 components:
   schemas:
-
     Ingredient:
       type: object
       properties:
@@ -111,4 +155,16 @@ components:
         value:
           type: number
 
-
+    Dish:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
